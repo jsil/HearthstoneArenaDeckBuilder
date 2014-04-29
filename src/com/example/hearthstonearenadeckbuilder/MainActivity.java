@@ -40,8 +40,8 @@ public class MainActivity extends Activity {
 	static ImageView mImageView1;
 	static ImageView mImageView2;
 	static ImageView mImageView3;
-	JSONObject obj;
-	JSONArray array;
+	JSONObject cardObj;
+	JSONArray cardArray;
 	JSONArray commonArray;
 	JSONArray rareArray;
 	JSONArray epicArray;
@@ -58,8 +58,39 @@ public class MainActivity extends Activity {
 //		pictureArea = (LinearLayout) findViewById(R.id.pictureArea);
 		jsonString = loadJSONFromAsset();
 		
-		
+		try {
+			cardObj = new JSONObject(jsonString);
+			cardArray = cardObj.getJSONArray("cards");
+			commonArray = new JSONArray();
+			rareArray = new JSONArray();
+			epicArray = new JSONArray();
+			legendArray = new JSONArray();
+			String hero = "mage";
+			
+		int length = cardArray.length();
+		for(int i=0;i<length;i++) {
+			if(cardArray.getJSONObject(i).getString("hero").equals(hero) || cardArray.getJSONObject(i).getString("hero").equals("neutral")) {
+				String quality = cardArray.getJSONObject(i).getString("quality");
+				if(quality.equals("common") || quality.equals("free")) {
+					commonArray.put(cardArray.getJSONObject(i));
+				}
+				else if(quality.equals("rare")) {
+					rareArray.put(cardArray.getJSONObject(i));
+				}
+				else if(quality.equals("epic")) {
+					epicArray.put(cardArray.getJSONObject(i));
+				}
+				else if(quality.equals("legendary")) {
+					legendArray.put(cardArray.getJSONObject(i));
+				}
+			}
+		}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
 
 
 	@Override
@@ -112,24 +143,34 @@ public class MainActivity extends Activity {
 
 	public void onClickBtn(View v) throws JSONException
 		{
-		try {
-			obj = new JSONObject(jsonString);
-			array = (obj).getJSONArray("cards");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-			
+		
 		//	LinearLayout.LayoutParams pictureLayout = new LinearLayout.LayoutParams(
 		//		    LinearLayout.LayoutParams.WRAP_CONTENT,
 		//			    LinearLayout.LayoutParams.WRAP_CONTENT);
 		//			pictureArea.setOrientation(LinearLayout.HORIZONTAL);
 			
+				JSONArray valueToDraw;
+				int cardValue = (int)(Math.random()*100);
+				if(cardValue <= 5)
+					valueToDraw = legendArray;
+				else if(cardValue > 5 && cardValue <= 20)
+					valueToDraw = epicArray;
+				else if(cardValue >20 && cardValue <= 55)
+					valueToDraw = rareArray;
+				else
+					valueToDraw = commonArray;
+				
+				Log.v("JS",Integer.toString(cardValue));
+		
 				int[] cardIds = {R.id.card1,R.id.card2,R.id.card3};
 				
-				int randomCard1 = 0 + (int)(Math.random()*array.length()); 
-				int randomCard2 = 0 + (int)(Math.random()*array.length());
-				int randomCard3 = 0 + (int)(Math.random()*array.length());
+				int randomCard1 = 0 + (int)(Math.random()*valueToDraw.length()); 
+				int randomCard2 = 0 + (int)(Math.random()*valueToDraw.length());
+				while(randomCard2 == randomCard1)
+					randomCard2 = 0 + (int)(Math.random()*valueToDraw.length());
+				int randomCard3 = 0 + (int)(Math.random()*valueToDraw.length());
+				while(randomCard3 == randomCard1 || randomCard3 == randomCard2)
+					randomCard3 = 0 + (int)(Math.random()*valueToDraw.length());
 				
 				int[] cards = {randomCard1,randomCard2,randomCard3};
 				
@@ -144,9 +185,9 @@ public class MainActivity extends Activity {
 				mImageView1 = (ImageView) findViewById(cardIds[0]);
 				mImageView2 = (ImageView) findViewById(cardIds[1]);
 				mImageView3 = (ImageView) findViewById(cardIds[2]);
-				card1 = array.getJSONObject(cards[0]);
-				card2 = array.getJSONObject(cards[1]);
-				card3 = array.getJSONObject(cards[2]);
+				card1 = valueToDraw.getJSONObject(cards[0]);
+				card2 = valueToDraw.getJSONObject(cards[1]);
+				card3 = valueToDraw.getJSONObject(cards[2]);
 				URL1 = card1.getString("image_url");
 				URL2 = card2.getString("image_url");
 				URL3 = card3.getString("image_url");
