@@ -18,8 +18,10 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 class DownloadImageTask extends AsyncTask<String, Void, Bitmap[]> {
 	protected Bitmap[] doInBackground(String... urls) {
@@ -49,46 +51,23 @@ public class MainActivity extends Activity {
 	LinearLayout pictureArea;
 	String jsonString;
 	public int cardId;
+	Spinner heroSpinner;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		heroSpinner = (Spinner) findViewById(R.id.hero_spinner);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+		        R.array.hero_array, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		heroSpinner.setAdapter(adapter);
+		
 //		pictureArea = (LinearLayout) findViewById(R.id.pictureArea);
 		jsonString = loadJSONFromAsset();
 		
-		try {
-			cardObj = new JSONObject(jsonString);
-			cardArray = cardObj.getJSONArray("cards");
-			commonArray = new JSONArray();
-			rareArray = new JSONArray();
-			epicArray = new JSONArray();
-			legendArray = new JSONArray();
-			String hero = "mage";
-			
-		int length = cardArray.length();
-		for(int i=0;i<length;i++) {
-			if(cardArray.getJSONObject(i).getString("hero").equals(hero) || cardArray.getJSONObject(i).getString("hero").equals("neutral")) {
-				String quality = cardArray.getJSONObject(i).getString("quality");
-				if(quality.equals("common") || quality.equals("free")) {
-					commonArray.put(cardArray.getJSONObject(i));
-				}
-				else if(quality.equals("rare")) {
-					rareArray.put(cardArray.getJSONObject(i));
-				}
-				else if(quality.equals("epic")) {
-					epicArray.put(cardArray.getJSONObject(i));
-				}
-				else if(quality.equals("legendary")) {
-					legendArray.put(cardArray.getJSONObject(i));
-				}
-			}
-		}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 	
 
@@ -195,4 +174,38 @@ public class MainActivity extends Activity {
 //				}
 				
 		}
+	public void heroButtonClick(View v) {
+		try {
+			cardObj = new JSONObject(jsonString);
+			cardArray = cardObj.getJSONArray("cards");
+			commonArray = new JSONArray();
+			rareArray = new JSONArray();
+			epicArray = new JSONArray();
+			legendArray = new JSONArray();
+			String hero = heroSpinner.getSelectedItem().toString();
+			
+		int length = cardArray.length();
+		for(int i=0;i<length;i++) {
+			if(cardArray.getJSONObject(i).getString("hero").equals(hero) || cardArray.getJSONObject(i).getString("hero").equals("neutral")) {
+				String quality = cardArray.getJSONObject(i).getString("quality");
+				if(quality.equals("common") || quality.equals("free")) {
+					commonArray.put(cardArray.getJSONObject(i));
+				}
+				else if(quality.equals("rare")) {
+					rareArray.put(cardArray.getJSONObject(i));
+				}
+				else if(quality.equals("epic")) {
+					epicArray.put(cardArray.getJSONObject(i));
+				}
+				else if(quality.equals("legendary")) {
+					legendArray.put(cardArray.getJSONObject(i));
+				}
+			}
+		}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }

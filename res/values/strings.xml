@@ -4,5 +4,17 @@
     <string name="app_name">Hearthstone Arena Deck Builder</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="hero">Select Hero</string>
+     <string-array name="hero_array">
+        <item>warrior</item>
+        <item>mage</item>
+        <item>paladin</item>
+        <item>rogue</item>
+        <item>priest</item>
+        <item>druid</item>
+        <item>shaman</item>
+        <item>warlock</item>
+        <item>hunter</item>
+    </string-array>
 
 </resources>
