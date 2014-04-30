@@ -58,6 +58,13 @@
        android:text="@string/hero"
        android:onClick="heroButtonClick" />
       
+      <ImageView
+       android:id="@+id/hero_pic"
+       android:src="@drawable/ic_launcher"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:contentDescription="@string/app_name"
+       />
       
 
 </LinearLayout>

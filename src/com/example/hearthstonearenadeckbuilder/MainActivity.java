@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -23,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
-class DownloadImageTask extends AsyncTask<String, Void, Bitmap[]> {
+class Download3CardsTask extends AsyncTask<String, Void, Bitmap[]> {
 	protected Bitmap[] doInBackground(String... urls) {
 		Bitmap[] cardImages = {MainActivity.loadImageFromNetwork(urls[0]),
 				MainActivity.loadImageFromNetwork(urls[1]),
@@ -34,6 +35,16 @@ class DownloadImageTask extends AsyncTask<String, Void, Bitmap[]> {
 		MainActivity.mImageView1.setImageBitmap(result[0]);
 		MainActivity.mImageView2.setImageBitmap(result[1]);
 		MainActivity.mImageView3.setImageBitmap(result[2]);
+	}
+}
+
+class DownloadHeroTask extends AsyncTask<String, Void, Bitmap> {
+	protected Bitmap doInBackground(String... urls) {
+		Bitmap heroImage = MainActivity.loadImageFromNetwork(urls[0]);
+		return heroImage;
+	}
+	protected void onPostExecute(Bitmap result) {
+		MainActivity.heroPic.setImageBitmap(result);
 	}
 }
 
@@ -52,11 +63,19 @@ public class MainActivity extends Activity {
 	String jsonString;
 	public int cardId;
 	Spinner heroSpinner;
+	static ImageView heroPic;
+	String[] heroUrls;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		heroPic = (ImageView) findViewById(R.id.hero_pic);
+		Resources res = getResources();
+		heroUrls = res.getStringArray(R.array.hero_urls);
+		Log.v("JS",heroUrls[0]);
+		new DownloadHeroTask().execute(heroUrls[0]);
 
 		heroSpinner = (Spinner) findViewById(R.id.hero_spinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -170,7 +189,7 @@ public class MainActivity extends Activity {
 				URL1 = card1.getString("image_url");
 				URL2 = card2.getString("image_url");
 				URL3 = card3.getString("image_url");
-				new DownloadImageTask().execute(URL1,URL2,URL3);
+				new Download3CardsTask().execute(URL1,URL2,URL3);
 //				}
 				
 		}
@@ -183,6 +202,9 @@ public class MainActivity extends Activity {
 			epicArray = new JSONArray();
 			legendArray = new JSONArray();
 			String hero = heroSpinner.getSelectedItem().toString();
+			int position = heroSpinner.getSelectedItemPosition();
+			new DownloadHeroTask().execute(heroUrls[position]);
+			
 			
 		int length = cardArray.length();
 		for(int i=0;i<length;i++) {
