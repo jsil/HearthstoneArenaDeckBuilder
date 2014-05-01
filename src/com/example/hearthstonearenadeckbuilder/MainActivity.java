@@ -52,6 +52,7 @@ class DownloadHeroTask extends AsyncTask<String, Void, Bitmap> {
 
 public class MainActivity extends Activity {
 
+	static final String JSON_MESSAGE = "com.example.hearthstonearenadeckbuilder.JSON";
 	static ImageView mImageView1;
 	static ImageView mImageView2;
 	static ImageView mImageView3;
@@ -204,6 +205,8 @@ public class MainActivity extends Activity {
 			deckNum++;
 			generateCards();
 		}
+		else
+			loadCards();
 	}
 	
 	public void cardCenterClick(View v) throws JSONException {
@@ -223,16 +226,17 @@ public class MainActivity extends Activity {
 	}
 	
 	public void deckButtonClick(View v) {
-		Log.v("JS",deckArray.toString());
+//		Log.v("JS",deckArray.toString());
+		loadCards();
 	}
 	
 	
 	private void loadCards() {
-//		Intent i = new Intent(this, Characters.class);
-//		
-//		i.putExtra(JSON_MESSAGE, obj.toString());
-//		//i.putIntegerArrayListExtra(Characters.CHARACTER_KEY, mSavedToppings);
-//		startActivity(i);
+		Intent i = new Intent(this, Cards.class);
+		
+		i.putExtra(JSON_MESSAGE, deckArray.toString());
+		//i.putIntegerArrayListExtra(Characters.CHARACTER_KEY, mSavedToppings);
+		startActivity(i);
 	}
 	
 	public void generateCards() throws JSONException {
