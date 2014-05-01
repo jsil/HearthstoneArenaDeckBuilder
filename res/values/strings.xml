@@ -5,6 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="hero">Select Hero</string>
+    <string name="view_deck">View Deck</string>
     <string-array name="hero_array">
         <item>warrior</item>
         <item>mage</item>

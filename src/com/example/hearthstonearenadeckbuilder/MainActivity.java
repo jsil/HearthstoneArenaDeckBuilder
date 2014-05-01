@@ -10,9 +10,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -65,11 +67,23 @@ public class MainActivity extends Activity {
 	Spinner heroSpinner;
 	static ImageView heroPic;
 	String[] heroUrls;
+	JSONArray deckArray;
+	int deckNum;
+	JSONObject card1;
+	JSONObject card2;
+	JSONObject card3;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		commonArray = new JSONArray();
+		rareArray = new JSONArray();
+		epicArray = new JSONArray();
+		legendArray = new JSONArray();
+		deckArray = new JSONArray();
+		deckNum = 0;
 		
 		heroPic = (ImageView) findViewById(R.id.hero_pic);
 		Resources res = getResources();
@@ -146,61 +160,15 @@ public class MainActivity extends Activity {
 		//		    LinearLayout.LayoutParams.WRAP_CONTENT,
 		//			    LinearLayout.LayoutParams.WRAP_CONTENT);
 		//			pictureArea.setOrientation(LinearLayout.HORIZONTAL);
-			
-				JSONArray valueToDraw;
-				int cardValue = (int)(Math.random()*100);
-				if(cardValue <= 5)
-					valueToDraw = legendArray;
-				else if(cardValue > 5 && cardValue <= 20)
-					valueToDraw = epicArray;
-				else if(cardValue >20 && cardValue <= 55)
-					valueToDraw = rareArray;
-				else
-					valueToDraw = commonArray;
+			generateCards();
 				
-				Log.v("JS",Integer.toString(cardValue));
-		
-				int[] cardIds = {R.id.card1,R.id.card2,R.id.card3};
-				
-				int randomCard1 = 0 + (int)(Math.random()*valueToDraw.length()); 
-				int randomCard2 = 0 + (int)(Math.random()*valueToDraw.length());
-				while(randomCard2 == randomCard1)
-					randomCard2 = 0 + (int)(Math.random()*valueToDraw.length());
-				int randomCard3 = 0 + (int)(Math.random()*valueToDraw.length());
-				while(randomCard3 == randomCard1 || randomCard3 == randomCard2)
-					randomCard3 = 0 + (int)(Math.random()*valueToDraw.length());
-				
-				int[] cards = {randomCard1,randomCard2,randomCard3};
-				
-				JSONObject card1;
-				JSONObject card2;
-				JSONObject card3;
-				String URL1;
-				String URL2;
-				String URL3;
-				
-//				for(int i=0;i<cardIds.length;i++) {
-				mImageView1 = (ImageView) findViewById(cardIds[0]);
-				mImageView2 = (ImageView) findViewById(cardIds[1]);
-				mImageView3 = (ImageView) findViewById(cardIds[2]);
-				card1 = valueToDraw.getJSONObject(cards[0]);
-				card2 = valueToDraw.getJSONObject(cards[1]);
-				card3 = valueToDraw.getJSONObject(cards[2]);
-				URL1 = card1.getString("image_url");
-				URL2 = card2.getString("image_url");
-				URL3 = card3.getString("image_url");
-				new Download3CardsTask().execute(URL1,URL2,URL3);
-//				}
 				
 		}
 	public void heroButtonClick(View v) {
 		try {
 			cardObj = new JSONObject(jsonString);
 			cardArray = cardObj.getJSONArray("cards");
-			commonArray = new JSONArray();
-			rareArray = new JSONArray();
-			epicArray = new JSONArray();
-			legendArray = new JSONArray();
+			
 			String hero = heroSpinner.getSelectedItem().toString();
 			int position = heroSpinner.getSelectedItemPosition();
 			new DownloadHeroTask().execute(heroUrls[position]);
@@ -230,4 +198,84 @@ public class MainActivity extends Activity {
 		}
 	}
 	
+	public void cardLeftClick(View v) throws JSONException {
+		if(deckNum<30) {
+			deckArray.put(card1);
+			deckNum++;
+			generateCards();
+		}
+	}
+	
+	public void cardCenterClick(View v) throws JSONException {
+		if(deckNum<30) {
+			deckArray.put(card2);
+			deckNum++;
+			generateCards();
+		}
+	}
+	
+	public void cardRightClick(View v) throws JSONException {
+		if(deckNum<30) {
+			deckArray.put(card3);
+			deckNum++;
+			generateCards();
+		}
+	}
+	
+	public void deckButtonClick(View v) {
+		Log.v("JS",deckArray.toString());
+	}
+	
+	
+	private void loadCards() {
+//		Intent i = new Intent(this, Characters.class);
+//		
+//		i.putExtra(JSON_MESSAGE, obj.toString());
+//		//i.putIntegerArrayListExtra(Characters.CHARACTER_KEY, mSavedToppings);
+//		startActivity(i);
+	}
+	
+	public void generateCards() throws JSONException {
+		JSONArray valueToDraw;
+		int cardValue = (int)(Math.random()*100);
+		if(cardValue <= 5)
+			valueToDraw = legendArray;
+		else if(cardValue > 5 && cardValue <= 20)
+			valueToDraw = epicArray;
+		else if(cardValue >20 && cardValue <= 55)
+			valueToDraw = rareArray;
+		else
+			valueToDraw = commonArray;
+		
+		Log.v("JS",Integer.toString(cardValue));
+
+		int[] cardIds = {R.id.card1,R.id.card2,R.id.card3};
+		
+		int randomCard1 = 0 + (int)(Math.random()*valueToDraw.length()); 
+		int randomCard2 = 0 + (int)(Math.random()*valueToDraw.length());
+		while(randomCard2 == randomCard1)
+			randomCard2 = 0 + (int)(Math.random()*valueToDraw.length());
+		int randomCard3 = 0 + (int)(Math.random()*valueToDraw.length());
+		while(randomCard3 == randomCard1 || randomCard3 == randomCard2)
+			randomCard3 = 0 + (int)(Math.random()*valueToDraw.length());
+		
+		int[] cards = {randomCard1,randomCard2,randomCard3};
+		
+		String URL1;
+		String URL2;
+		String URL3;
+		
+//		for(int i=0;i<cardIds.length;i++) {
+		mImageView1 = (ImageView) findViewById(cardIds[0]);
+		mImageView2 = (ImageView) findViewById(cardIds[1]);
+		mImageView3 = (ImageView) findViewById(cardIds[2]);
+		card1 = valueToDraw.getJSONObject(cards[0]);
+		card2 = valueToDraw.getJSONObject(cards[1]);
+		card3 = valueToDraw.getJSONObject(cards[2]);
+		URL1 = card1.getString("image_url");
+		URL2 = card2.getString("image_url");
+		URL3 = card3.getString("image_url");
+		new Download3CardsTask().execute(URL1,URL2,URL3);
+//		}
+	}
 }
