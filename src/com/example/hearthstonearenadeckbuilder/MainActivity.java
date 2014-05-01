@@ -201,8 +201,19 @@ public class MainActivity extends Activity {
 	
 	public void cardLeftClick(View v) throws JSONException {
 		if(deckNum<30) {
-			deckArray.put(card1);
-			deckNum++;
+			boolean isNew = true;
+			card1.put("quantity",1);
+			for(int i=0;i<deckArray.length();i++) {
+				if(deckArray.getJSONObject(i).get("name").equals(card1.get("name"))) {
+					deckArray.getJSONObject(i).put("quantity", 1 + Integer.parseInt(deckArray.getJSONObject(i).get("quantity").toString()));	
+					deckNum++;
+					isNew = false;
+				}
+			}
+			if(isNew) {
+				deckArray.put(card1);
+				deckNum++;
+			}
 			generateCards();
 		}
 		else
@@ -211,16 +222,38 @@ public class MainActivity extends Activity {
 	
 	public void cardCenterClick(View v) throws JSONException {
 		if(deckNum<30) {
-			deckArray.put(card2);
-			deckNum++;
+			boolean isNew = true;
+			card2.put("quantity",1);
+			for(int i=0;i<deckArray.length();i++) {
+				if(deckArray.getJSONObject(i).get("name").equals(card2.get("name"))) {
+					deckArray.getJSONObject(i).put("quantity", 1 + Integer.parseInt(deckArray.getJSONObject(i).get("quantity").toString()));	
+					deckNum++;
+					isNew = false;
+				}
+			}
+			if(isNew) {
+				deckArray.put(card2);
+				deckNum++;
+			}
 			generateCards();
 		}
 	}
 	
 	public void cardRightClick(View v) throws JSONException {
 		if(deckNum<30) {
-			deckArray.put(card3);
-			deckNum++;
+			boolean isNew = true;
+			card3.put("quantity",1);
+			for(int i=0;i<deckArray.length();i++) {
+				if(deckArray.getJSONObject(i).get("name").equals(card3.get("name"))) {
+					deckArray.getJSONObject(i).put("quantity", 1 + Integer.parseInt(deckArray.getJSONObject(i).get("quantity").toString()));	
+					deckNum++;
+					isNew = false;
+				}
+			}
+			if(isNew) {
+				deckArray.put(card3);
+				deckNum++;
+			}
 			generateCards();
 		}
 	}

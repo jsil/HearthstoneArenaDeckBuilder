@@ -78,6 +78,7 @@ public class Cards extends ListActivity {
 			for(int i=0;i<mArray.length();i++) {
 				Card card = new Card();
 				card.mName = mArray.getJSONObject(i).getString("name");
+				card.mQuantity = Integer.parseInt(mArray.getJSONObject(i).getString("quantity"));
 	//			card.mOccupation = mArray.getJSONObject(i).getString("occupation");
 	//			card.mIsGenderFemale = mArray.getJSONObject(i).getBoolean("isGenderFemale");
 	//			card.mAge = mArray.getJSONObject(i).getInt("age");
@@ -127,6 +128,8 @@ public class Cards extends ListActivity {
 //			
 			TextView nameTextView = (TextView) v.findViewById(R.id.text);
 			nameTextView.setText(mCards[position].mName);
+			TextView quantityTextView = (TextView) v.findViewById(R.id.quantity);
+			quantityTextView.setText(Integer.toString(mCards[position].mQuantity));
 //			TextView occupationTextView = (TextView) v.findViewById(R.id.occupation);
 //			occupationTextView.setText(mCharacters[position].mOccupation);
 //			TextView genderTextView = (TextView) v.findViewById(R.id.gender);
@@ -146,6 +149,7 @@ public class Cards extends ListActivity {
 	
 	public static class Card {
 		String mName;
+		int mQuantity;
 //		String mOccupation;
 //		boolean mIsGenderFemale;
 //		int mAge;
@@ -153,8 +157,9 @@ public class Cards extends ListActivity {
 		
 		public Card() {}
 		
-		public Card(String name) {
+		public Card(String name, int quantity) {
 		mName = name;
+		mQuantity = quantity;
 //		mOccupation = occupation;
 //		mIsGenderFemale = isGenderFemale;
 //		mAge = age;
