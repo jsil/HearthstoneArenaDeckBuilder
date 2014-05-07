@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.graphics.Typeface;
 
 class Download3CardsTask extends AsyncTask<String, Void, Bitmap[]> {
@@ -38,6 +39,16 @@ class Download3CardsTask extends AsyncTask<String, Void, Bitmap[]> {
 		MainActivity.mImageView1.setImageBitmap(result[0]);
 		MainActivity.mImageView2.setImageBitmap(result[1]);
 		MainActivity.mImageView3.setImageBitmap(result[2]);
+	}
+}
+
+class DownloadHeroTask extends AsyncTask<String, Void, Bitmap> {
+	protected Bitmap doInBackground(String... urls) {
+		Bitmap heroImage = MainActivity.loadImageFromNetwork(urls[0]);
+		return heroImage;
+	}
+	protected void onPostExecute(Bitmap result) {
+		MainActivity.heroPic.setImageBitmap(result);
 	}
 }
 
@@ -58,7 +69,6 @@ public class MainActivity extends Activity {
 	LinearLayout pictureArea;
 	String jsonString;
 	public int cardId;
-	Spinner heroSpinner;
 	static ImageView heroPic;
 	String[] heroUrls;
 	JSONArray deckArray;
@@ -66,6 +76,7 @@ public class MainActivity extends Activity {
 	JSONObject card1;
 	JSONObject card2;
 	JSONObject card3;
+	TextView cardCounter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +89,19 @@ public class MainActivity extends Activity {
 		mImageView2 = (ImageView) findViewById(R.id.card2);
 		mImageView3 = (ImageView) findViewById(R.id.card3);
 		
+		cardCounter = (TextView) findViewById(R.id.deck_count);
+		cardCounter.setText("0/30");
+		
+		heroPic = (ImageView) findViewById(R.id.hero_pic);
+		
 		Intent intent = getIntent();
 		String heroName = intent.getStringExtra(STRING_MESSAGE);
 		int heroNum = intent.getIntExtra(MainActivity.INT_MESSAGE,10);
+		
+		Resources res = getResources();
+		heroUrls = res.getStringArray(R.array.hero_urls);
+		
+		new DownloadHeroTask().execute(heroUrls[heroNum]);
 		
 		//Set all fonts on page
 		Button deckBtn = (Button) findViewById(R.id.deck_button);
@@ -88,6 +109,7 @@ public class MainActivity extends Activity {
 	                                          "fonts/Belwe.ttf");
 
 	    deckBtn.setTypeface(face);
+	    cardCounter.setTypeface(face);
 		
 		commonArray = new JSONArray();
 		rareArray = new JSONArray();
@@ -99,7 +121,7 @@ public class MainActivity extends Activity {
 		Log.v("JS",Integer.toString(heroNum));
 		Log.v("JS",heroName);
 		
-		generatePool("paladin",heroNum);
+		generatePool(heroName,heroNum);
 	}
 	
 	@Override
@@ -196,8 +218,11 @@ public class MainActivity extends Activity {
 			deckArray.put(card1);
 			deckNum++;
 		}
-		if(deckNum<30)
+		if(deckNum<30) {
 			generateCards();
+			String newText = "" + Integer.toString(deckNum) + "/30";
+			cardCounter.setText(newText);
+		}
 		else
 			loadCards();
 	}
@@ -216,8 +241,11 @@ public class MainActivity extends Activity {
 			deckArray.put(card1);
 			deckNum++;
 		}
-		if(deckNum<30)
+		if(deckNum<30) {
 			generateCards();
+			String newText = "" + Integer.toString(deckNum) + "/30";
+			cardCounter.setText(newText);
+		}
 		else
 			loadCards();
 	}
@@ -236,8 +264,11 @@ public class MainActivity extends Activity {
 			deckArray.put(card1);
 			deckNum++;
 		}
-		if(deckNum<30)
+		if(deckNum<30) {
 			generateCards();
+			String newText = "" + Integer.toString(deckNum) + "/30";
+			cardCounter.setText(newText);
+		}
 		else
 			loadCards();
 	}
