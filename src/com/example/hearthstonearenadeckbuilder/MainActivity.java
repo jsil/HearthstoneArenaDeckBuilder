@@ -21,10 +21,11 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.graphics.Typeface;
 
 class Download3CardsTask extends AsyncTask<String, Void, Bitmap[]> {
 	protected Bitmap[] doInBackground(String... urls) {
@@ -40,19 +41,11 @@ class Download3CardsTask extends AsyncTask<String, Void, Bitmap[]> {
 	}
 }
 
-class DownloadHeroTask extends AsyncTask<String, Void, Bitmap> {
-	protected Bitmap doInBackground(String... urls) {
-		Bitmap heroImage = MainActivity.loadImageFromNetwork(urls[0]);
-		return heroImage;
-	}
-	protected void onPostExecute(Bitmap result) {
-		MainActivity.heroPic.setImageBitmap(result);
-	}
-}
-
 public class MainActivity extends Activity {
 
 	static final String JSON_MESSAGE = "com.example.hearthstonearenadeckbuilder.JSON";
+	static final String STRING_MESSAGE = "com.example.hearthstonearenadeckbuilder.STRING";
+	static final String INT_MESSAGE = "com.example.hearthstonearenadeckbuilder.INT";
 	static ImageView mImageView1;
 	static ImageView mImageView2;
 	static ImageView mImageView3;
@@ -79,6 +72,23 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		jsonString = loadJSONFromAsset();
+		
+		mImageView1 = (ImageView) findViewById(R.id.card1);
+		mImageView2 = (ImageView) findViewById(R.id.card2);
+		mImageView3 = (ImageView) findViewById(R.id.card3);
+		
+		Intent intent = getIntent();
+		String heroName = intent.getStringExtra(STRING_MESSAGE);
+		int heroNum = intent.getIntExtra(MainActivity.INT_MESSAGE,10);
+		
+		//Set all fonts on page
+		Button deckBtn = (Button) findViewById(R.id.deck_button);
+	    Typeface face=Typeface.createFromAsset(getAssets(),
+	                                          "fonts/Belwe.ttf");
+
+	    deckBtn.setTypeface(face);
+		
 		commonArray = new JSONArray();
 		rareArray = new JSONArray();
 		epicArray = new JSONArray();
@@ -86,25 +96,15 @@ public class MainActivity extends Activity {
 		deckArray = new JSONArray();
 		deckNum = 0;
 		
-		heroPic = (ImageView) findViewById(R.id.hero_pic);
-		Resources res = getResources();
-		heroUrls = res.getStringArray(R.array.hero_urls);
-		Log.v("JS",heroUrls[0]);
-		new DownloadHeroTask().execute(heroUrls[0]);
-
-		heroSpinner = (Spinner) findViewById(R.id.hero_spinner);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-		        R.array.hero_array, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		heroSpinner.setAdapter(adapter);
+		Log.v("JS",Integer.toString(heroNum));
+		Log.v("JS",heroName);
 		
-//		pictureArea = (LinearLayout) findViewById(R.id.pictureArea);
-		jsonString = loadJSONFromAsset();
-		
-		
+		generatePool("paladin",heroNum);
 	}
 	
-
+	@Override
+	public void onBackPressed() {
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,83 +116,66 @@ public class MainActivity extends Activity {
 	public String loadJSONFromAsset() {
         String json = null;
         try {
-
             InputStream is = getAssets().open("all-cards.json");
-
             int size = is.available();
-
             byte[] buffer = new byte[size];
-
             is.read(buffer);
-
             is.close();
-
             json = new String(buffer, "UTF-8");
-
-
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;
         }
         return json;
-
     }
+	
 	public static Bitmap loadImageFromNetwork (String imgUrl) {
 		Bitmap img = null;
 		URL url;
 		try {
-		url = new URL(imgUrl);
-		img = BitmapFactory.decodeStream(url.openStream());
+			url = new URL(imgUrl);
+			img = BitmapFactory.decodeStream(url.openStream());
 		} catch (MalformedURLException e) {
-		Log.e("JS", "URL is bad");
-		e.printStackTrace();
+			Log.e("JS", "URL is bad");
+			e.printStackTrace();
 		} catch (IOException e) {
-		Log.e("JS", "Failed to decode Bitmap");
-		e.printStackTrace();
+			Log.e("JS", "Failed to decode Bitmap");
+			e.printStackTrace();
 		}
 		return img;
-		}
+	}
 	
 
-	public void onClickBtn(View v) throws JSONException
-		{
-		
-		//	LinearLayout.LayoutParams pictureLayout = new LinearLayout.LayoutParams(
-		//		    LinearLayout.LayoutParams.WRAP_CONTENT,
-		//			    LinearLayout.LayoutParams.WRAP_CONTENT);
-		//			pictureArea.setOrientation(LinearLayout.HORIZONTAL);
-			generateCards();
-				
-				
-		}
-	public void heroButtonClick(View v) {
+	public void onClickBtn(View v) throws JSONException{
+		generateCards();		
+	}
+	
+	public void generatePool(String heroName, int heroNum) {
 		try {
 			cardObj = new JSONObject(jsonString);
 			cardArray = cardObj.getJSONArray("cards");
 			
-			String hero = heroSpinner.getSelectedItem().toString();
-			int position = heroSpinner.getSelectedItemPosition();
-			new DownloadHeroTask().execute(heroUrls[position]);
+			String hero = heroName;
 			
-			
-		int length = cardArray.length();
-		for(int i=0;i<length;i++) {
-			if(cardArray.getJSONObject(i).getString("hero").equals(hero) || cardArray.getJSONObject(i).getString("hero").equals("neutral")) {
-				String quality = cardArray.getJSONObject(i).getString("quality");
-				if(quality.equals("common") || quality.equals("free")) {
-					commonArray.put(cardArray.getJSONObject(i));
-				}
-				else if(quality.equals("rare")) {
-					rareArray.put(cardArray.getJSONObject(i));
-				}
-				else if(quality.equals("epic")) {
-					epicArray.put(cardArray.getJSONObject(i));
-				}
-				else if(quality.equals("legendary")) {
-					legendArray.put(cardArray.getJSONObject(i));
+			int length = cardArray.length();
+			for(int i=0;i<length;i++) {
+				if(cardArray.getJSONObject(i).getString("hero").equals(hero) || cardArray.getJSONObject(i).getString("hero").equals("neutral")) {
+					String quality = cardArray.getJSONObject(i).getString("quality");
+					if(quality.equals("common") || quality.equals("free")) {
+						commonArray.put(cardArray.getJSONObject(i));
+					}
+					else if(quality.equals("rare")) {
+						rareArray.put(cardArray.getJSONObject(i));
+					}
+					else if(quality.equals("epic")) {
+						epicArray.put(cardArray.getJSONObject(i));
+					}
+					else if(quality.equals("legendary")) {
+						legendArray.put(cardArray.getJSONObject(i));
+					}
 				}
 			}
-		}
+			generateCards();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -200,62 +183,63 @@ public class MainActivity extends Activity {
 	}
 	
 	public void cardLeftClick(View v) throws JSONException {
-		if(deckNum<30) {
-			boolean isNew = true;
-			card1.put("quantity",1);
-			for(int i=0;i<deckArray.length();i++) {
-				if(deckArray.getJSONObject(i).get("name").equals(card1.get("name"))) {
-					deckArray.getJSONObject(i).put("quantity", 1 + Integer.parseInt(deckArray.getJSONObject(i).get("quantity").toString()));	
-					deckNum++;
-					isNew = false;
-				}
-			}
-			if(isNew) {
-				deckArray.put(card1);
+		boolean isNew = true;
+		card1.put("quantity",1);
+		for(int i=0;i<deckArray.length();i++) {
+			if(deckArray.getJSONObject(i).get("name").equals(card1.get("name"))) {
+				deckArray.getJSONObject(i).put("quantity", 1 + Integer.parseInt(deckArray.getJSONObject(i).get("quantity").toString()));	
 				deckNum++;
+				isNew = false;
 			}
-			generateCards();
 		}
+		if(isNew) {
+			deckArray.put(card1);
+			deckNum++;
+		}
+		if(deckNum<30)
+			generateCards();
 		else
 			loadCards();
 	}
 	
 	public void cardCenterClick(View v) throws JSONException {
-		if(deckNum<30) {
-			boolean isNew = true;
-			card2.put("quantity",1);
-			for(int i=0;i<deckArray.length();i++) {
-				if(deckArray.getJSONObject(i).get("name").equals(card2.get("name"))) {
-					deckArray.getJSONObject(i).put("quantity", 1 + Integer.parseInt(deckArray.getJSONObject(i).get("quantity").toString()));	
-					deckNum++;
-					isNew = false;
-				}
-			}
-			if(isNew) {
-				deckArray.put(card2);
+		boolean isNew = true;
+		card2.put("quantity",1);
+		for(int i=0;i<deckArray.length();i++) {
+			if(deckArray.getJSONObject(i).get("name").equals(card2.get("name"))) {
+				deckArray.getJSONObject(i).put("quantity", 1 + Integer.parseInt(deckArray.getJSONObject(i).get("quantity").toString()));	
 				deckNum++;
+				isNew = false;
 			}
-			generateCards();
 		}
+		if(isNew) {
+			deckArray.put(card1);
+			deckNum++;
+		}
+		if(deckNum<30)
+			generateCards();
+		else
+			loadCards();
 	}
 	
 	public void cardRightClick(View v) throws JSONException {
-		if(deckNum<30) {
-			boolean isNew = true;
-			card3.put("quantity",1);
-			for(int i=0;i<deckArray.length();i++) {
-				if(deckArray.getJSONObject(i).get("name").equals(card3.get("name"))) {
-					deckArray.getJSONObject(i).put("quantity", 1 + Integer.parseInt(deckArray.getJSONObject(i).get("quantity").toString()));	
-					deckNum++;
-					isNew = false;
-				}
-			}
-			if(isNew) {
-				deckArray.put(card3);
+		boolean isNew = true;
+		card3.put("quantity",1);
+		for(int i=0;i<deckArray.length();i++) {
+			if(deckArray.getJSONObject(i).get("name").equals(card3.get("name"))) {
+				deckArray.getJSONObject(i).put("quantity", 1 + Integer.parseInt(deckArray.getJSONObject(i).get("quantity").toString()));	
 				deckNum++;
+				isNew = false;
 			}
-			generateCards();
 		}
+		if(isNew) {
+			deckArray.put(card1);
+			deckNum++;
+		}
+		if(deckNum<30)
+			generateCards();
+		else
+			loadCards();
 	}
 	
 	public void deckButtonClick(View v) {
@@ -268,25 +252,23 @@ public class MainActivity extends Activity {
 		Intent i = new Intent(this, Cards.class);
 		
 		i.putExtra(JSON_MESSAGE, deckArray.toString());
-		//i.putIntegerArrayListExtra(Characters.CHARACTER_KEY, mSavedToppings);
 		startActivity(i);
 	}
 	
 	public void generateCards() throws JSONException {
 		JSONArray valueToDraw;
-		int cardValue = (int)(Math.random()*100);
-		if(cardValue <= 5)
+		int cardValue = 0 + (int)(Math.random()*100);
+		if(cardValue <= 1)
 			valueToDraw = legendArray;
-		else if(cardValue > 5 && cardValue <= 20)
+		else if(cardValue > 1 && cardValue <= 4) 
 			valueToDraw = epicArray;
-		else if(cardValue >20 && cardValue <= 55)
+		else if(cardValue > 4 && cardValue <= 20)
 			valueToDraw = rareArray;
 		else
 			valueToDraw = commonArray;
+
 		
 		Log.v("JS",Integer.toString(cardValue));
-
-		int[] cardIds = {R.id.card1,R.id.card2,R.id.card3};
 		
 		int randomCard1 = 0 + (int)(Math.random()*valueToDraw.length()); 
 		int randomCard2 = 0 + (int)(Math.random()*valueToDraw.length());
@@ -302,10 +284,7 @@ public class MainActivity extends Activity {
 		String URL2;
 		String URL3;
 		
-//		for(int i=0;i<cardIds.length;i++) {
-		mImageView1 = (ImageView) findViewById(cardIds[0]);
-		mImageView2 = (ImageView) findViewById(cardIds[1]);
-		mImageView3 = (ImageView) findViewById(cardIds[2]);
+		
 		card1 = valueToDraw.getJSONObject(cards[0]);
 		card2 = valueToDraw.getJSONObject(cards[1]);
 		card3 = valueToDraw.getJSONObject(cards[2]);
@@ -313,6 +292,5 @@ public class MainActivity extends Activity {
 		URL2 = card2.getString("image_url");
 		URL3 = card3.getString("image_url");
 		new Download3CardsTask().execute(URL1,URL2,URL3);
-//		}
 	}
 }

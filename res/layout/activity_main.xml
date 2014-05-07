@@ -44,7 +44,7 @@
    
    </LinearLayout>
    
-      <Button
+    <!--   <Button
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:text="@string/app_name"
@@ -67,13 +67,122 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:contentDescription="@string/app_name"
-       />
+       /> -->
       
       <Button
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:text="@string/view_deck"
+       android:id="@+id/deck_button"
        android:onClick="deckButtonClick" />
       
+      <RelativeLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" >
+
+           <ProgressBar
+	          android:id="@+id/mana0"
+	          style="?android:attr/progressBarStyleHorizontal"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:progress="50"
+	          android:progressDrawable="@drawable/progressbarstyle"
+	          android:paddingBottom="@dimen/progress_padding" />
+           
+           <ProgressBar
+	          android:id="@+id/mana1"
+	          style="?android:attr/progressBarStyleHorizontal"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_below="@id/mana0"
+	          android:progress="75"
+	          android:progressDrawable="@drawable/progressbarstyle"
+	          android:paddingBottom="@dimen/progress_padding" />
+           
+           <ProgressBar
+	          android:id="@+id/mana2"
+	          style="?android:attr/progressBarStyleHorizontal"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_below="@id/mana1"
+	          android:progress="100"
+	          android:progressDrawable="@drawable/progressbarstyle"
+	          android:paddingBottom="@dimen/progress_padding" />
+           
+           <ProgressBar
+	          android:id="@+id/mana3"
+	          style="?android:attr/progressBarStyleHorizontal"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_below="@id/mana2"
+	          android:progressDrawable="@drawable/progressbarstyle"
+	          android:paddingBottom="@dimen/progress_padding" />
+           
+           <ProgressBar
+	          android:id="@+id/mana4"
+	          style="?android:attr/progressBarStyleHorizontal"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_below="@id/mana3"
+	          android:progressDrawable="@drawable/progressbarstyle"
+	          android:paddingBottom="@dimen/progress_padding" />
+           
+           <ProgressBar
+	          android:id="@+id/mana5"
+	          style="?android:attr/progressBarStyleHorizontal"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_below="@id/mana4"
+	          android:progressDrawable="@drawable/progressbarstyle"
+	          android:paddingBottom="@dimen/progress_padding" />
+           
+           <ProgressBar
+	          android:id="@+id/mana6"
+	          style="?android:attr/progressBarStyleHorizontal"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_below="@id/mana5"
+	          android:progressDrawable="@drawable/progressbarstyle"
+	          android:paddingBottom="@dimen/progress_padding" />
+           
+           <ProgressBar
+	          android:id="@+id/mana7"
+	          style="?android:attr/progressBarStyleHorizontal"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_below="@id/mana6"
+	          android:progressDrawable="@drawable/progressbarstyle"
+	          android:paddingBottom="@dimen/progress_padding" />
+           
+           <ProgressBar
+	          android:id="@+id/mana8"
+	          style="?android:attr/progressBarStyleHorizontal"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_below="@id/mana7"
+	          android:progressDrawable="@drawable/progressbarstyle"
+	          android:paddingBottom="@dimen/progress_padding" />
+           
+           <ProgressBar
+	          android:id="@+id/mana9"
+	          style="?android:attr/progressBarStyleHorizontal"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_below="@id/mana8"
+	          android:progressDrawable="@drawable/progressbarstyle"
+	          android:paddingBottom="@dimen/progress_padding" />
+           
+           <ProgressBar
+	          android:id="@+id/mana10"
+	          style="?android:attr/progressBarStyleHorizontal"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_below="@id/mana9"
+	          android:progressDrawable="@drawable/progressbarstyle"
+	          android:paddingBottom="@dimen/progress_padding" />
+          
+      </RelativeLayout>
+
+    
 
 </LinearLayout>
