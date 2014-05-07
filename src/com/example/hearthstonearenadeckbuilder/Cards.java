@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -130,6 +131,13 @@ public class Cards extends ListActivity {
 			nameTextView.setText(mCards[position].mName);
 			TextView quantityTextView = (TextView) v.findViewById(R.id.quantity);
 			quantityTextView.setText(Integer.toString(mCards[position].mQuantity));
+			
+			//Set all fonts on page
+		    Typeface face = Typeface.createFromAsset(getAssets(),
+		                                          "fonts/Belwe.ttf");
+		    nameTextView.setTypeface(face);
+		    quantityTextView.setTypeface(face);
+		    
 //			TextView occupationTextView = (TextView) v.findViewById(R.id.occupation);
 //			occupationTextView.setText(mCharacters[position].mOccupation);
 //			TextView genderTextView = (TextView) v.findViewById(R.id.gender);

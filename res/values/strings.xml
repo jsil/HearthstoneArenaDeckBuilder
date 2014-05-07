@@ -29,5 +29,14 @@
 	    <item>http://wow.zamimg.com/images/hearthstone/cards/enus/medium/HERO_05.png</item>
 	    
 	</string-array>
+	
+	<string name="zero">0</string>
+	<string name="one">1</string>
+	<string name="two">2</string>
+	<string name="three">3</string>
+	<string name="four">4</string>
+	<string name="five">5</string>
+	<string name="six">6</string>
+	<string name="seven">7+</string>
    	
 </resources>

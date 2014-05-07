@@ -110,6 +110,26 @@ public class MainActivity extends Activity {
 
 	    deckBtn.setTypeface(face);
 	    cardCounter.setTypeface(face);
+	    
+	    
+	    //Set mana counter fonts
+	    TextView mana0 = (TextView) findViewById(R.id.manaNum0);
+	    TextView mana1 = (TextView) findViewById(R.id.manaNum1);
+	    TextView mana2 = (TextView) findViewById(R.id.manaNum2);
+	    TextView mana3 = (TextView) findViewById(R.id.manaNum3);
+	    TextView mana4 = (TextView) findViewById(R.id.manaNum4);
+	    TextView mana5 = (TextView) findViewById(R.id.manaNum5);
+	    TextView mana6 = (TextView) findViewById(R.id.manaNum6);
+	    TextView mana7 = (TextView) findViewById(R.id.manaNum7);
+	    
+	    mana0.setTypeface(face);
+	    mana1.setTypeface(face);
+	    mana2.setTypeface(face);
+	    mana3.setTypeface(face);
+	    mana4.setTypeface(face);
+	    mana5.setTypeface(face);
+	    mana6.setTypeface(face);
+	    mana7.setTypeface(face);
 		
 		commonArray = new JSONArray();
 		rareArray = new JSONArray();

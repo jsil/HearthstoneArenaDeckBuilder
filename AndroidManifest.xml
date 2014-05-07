@@ -17,13 +17,16 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.hearthstonearenadeckbuilder.MainActivity" >
+            android:name="com.example.hearthstonearenadeckbuilder.MainActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.example.hearthstonearenadeckbuilder.Cards" >
+            android:name="com.example.hearthstonearenadeckbuilder.Cards"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.example.hearthstonearenadeckbuilder.HeroPick" >
+            android:name="com.example.hearthstonearenadeckbuilder.HeroPick"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
