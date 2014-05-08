@@ -270,31 +270,51 @@
 
           
       </RelativeLayout>
-
-    
-      <Button
+      
+      <RelativeLayout
+        android:layout_width="match_parent"
+   		android:layout_height="130dp"
+   		android:background="@drawable/infoboxstyle"
+   		android:layout_alignParentBottom="true">
+           
+       <Button
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:text="@string/view_deck"
-       android:id="@+id/deck_button"
-       android:onClick="deckButtonClick"
-       android:layout_alignParentBottom="true" />
+       android:text="@string/hero_return"
+       android:id="@+id/hero_return_button"
+       android:onClick="heroReturnClick"
+       android:layout_marginLeft="10dp"
+       android:layout_alignParentLeft="true"
+       android:layout_centerVertical="true"/>
+    
       
        <ImageView
        android:id="@+id/hero_pic"
        android:src="@drawable/ic_launcher"
        android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
+       android:layout_height="match_parent"
        android:contentDescription="@string/app_name"
-       android:layout_alignParentBottom="true"
-       android:layout_toRightOf="@id/deck_button" />
+       android:layout_toRightOf="@id/hero_return_button"
+       android:layout_alignParentBottom="true" />
+       
+       <Button
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="@string/view_deck"
+       android:id="@+id/deck_button"
+       android:onClick="deckButtonClick"
+       android:layout_toRightOf="@id/hero_pic"
+       android:layout_centerVertical="true"  />
       
       <TextView
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:id="@+id/deck_count"
-       android:layout_alignParentBottom="true"
-       android:layout_alignParentRight="true"/>
+       android:layout_marginBottom="10dp"
+       android:layout_below="@id/deck_button"
+       android:layout_toRightOf="@id/hero_pic"/>
+      
+      </RelativeLayout>
 
       
 </RelativeLayout>

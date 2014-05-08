@@ -134,11 +134,13 @@ public class MainActivity extends Activity {
 		new DownloadHeroTask().execute(heroUrls[heroNum]);
 		
 		//Set all fonts on page
+		Button heroReturnBtn = (Button) findViewById(R.id.hero_return_button);
 		Button deckBtn = (Button) findViewById(R.id.deck_button);
 		TextView chooseText = (TextView) findViewById(R.id.choose_a_card);
 	    Typeface face=Typeface.createFromAsset(getAssets(),
 	                                          "fonts/Belwe.ttf");
 
+	    heroReturnBtn.setTypeface(face);
 	    deckBtn.setTypeface(face);
 	    chooseText.setTypeface(face);
 	    cardCounter.setTypeface(face);
@@ -349,6 +351,11 @@ public class MainActivity extends Activity {
 	public void deckButtonClick(View v) {
 //		Log.v("JS",deckArray.toString());
 		loadCards();
+	}
+	
+	public void heroReturnClick(View v) {
+		Intent i = new Intent(this, HeroPick.class);
+		startActivity(i);
 	}
 	
 	public void updateMana(int manaVal) {
