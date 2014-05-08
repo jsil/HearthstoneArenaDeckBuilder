@@ -110,10 +110,12 @@ public class MainActivity extends Activity {
 		
 		//Set all fonts on page
 		Button deckBtn = (Button) findViewById(R.id.deck_button);
+		TextView chooseText = (TextView) findViewById(R.id.choose_a_card);
 	    Typeface face=Typeface.createFromAsset(getAssets(),
 	                                          "fonts/Belwe.ttf");
 
 	    deckBtn.setTypeface(face);
+	    chooseText.setTypeface(face);
 	    cardCounter.setTypeface(face);
 	    
 	    

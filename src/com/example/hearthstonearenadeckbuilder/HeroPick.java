@@ -50,7 +50,7 @@ public class HeroPick extends Activity {
 		setContentView(R.layout.hero_pick);
 		
 		//Set all fonts on page
-		TextView heroText = (TextView) findViewById(R.id.hero_text);
+		TextView heroText = (TextView) findViewById(R.id.select_text);
 	    Typeface face = Typeface.createFromAsset(getAssets(),
 	                                          "fonts/Belwe.ttf");
 
