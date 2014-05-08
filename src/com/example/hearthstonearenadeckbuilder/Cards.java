@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 //class DownloadImagesTask extends AsyncTask<String, Integer, Bitmap[]> {
@@ -56,10 +57,10 @@ import android.widget.TextView;
 
 
 public class Cards extends ListActivity {
+	static final String STRING_MESSAGE = "com.example.hearthstonearenadeckbuilder.STRING";
 	private CardAdapter adapter;
 	JSONObject mJSON;
 	JSONArray mArray;
-	String[] mImgLinks;
 	static Card[] cards = null;
 	
 	
@@ -71,15 +72,16 @@ public class Cards extends ListActivity {
 		try {
 			Intent intent = getIntent();
 			String jsonString = intent.getStringExtra(MainActivity.JSON_MESSAGE);
+
 //			mJSON = new JSONObject(jsonString);
 //			mArray = (mJSON).getJSONArray("caricatures");
 			mArray = new JSONArray(jsonString);
 			cards = new Card[mArray.length()];
-			mImgLinks = new String[mArray.length()];
 			for(int i=0;i<mArray.length();i++) {
 				Card card = new Card();
 				card.mName = mArray.getJSONObject(i).getString("name");
 				card.mQuantity = Integer.parseInt(mArray.getJSONObject(i).getString("quantity"));
+				card.mImagePath = mArray.getJSONObject(i).getString("image_url");
 	//			card.mOccupation = mArray.getJSONObject(i).getString("occupation");
 	//			card.mIsGenderFemale = mArray.getJSONObject(i).getBoolean("isGenderFemale");
 	//			card.mAge = mArray.getJSONObject(i).getInt("age");
@@ -126,11 +128,19 @@ public class Cards extends ListActivity {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		 
 			View v = inflater.inflate(R.layout.card, parent, false);
+			
+			RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.card_layout);
+			
+			layout.setOnClickListener(openCard);
+			
 //			
 			TextView nameTextView = (TextView) v.findViewById(R.id.text);
 			nameTextView.setText(mCards[position].mName);
 			TextView quantityTextView = (TextView) v.findViewById(R.id.quantity);
 			quantityTextView.setText(Integer.toString(mCards[position].mQuantity));
+			
+			TextView urlText = (TextView) v.findViewById(R.id.url);
+			urlText.setText(mCards[position].mImagePath);
 			
 			//Set all fonts on page
 		    Typeface face = Typeface.createFromAsset(getAssets(),
@@ -152,26 +162,33 @@ public class Cards extends ListActivity {
 
 			return v;
 		}
-	
+		
+		View.OnClickListener openCard = new View.OnClickListener() {
+		    public void onClick(View v) {
+		      TextView url = (TextView) v.findViewById(R.id.url);
+		      String urlText = (String) url.getText();
+		      
+		      Intent i = new Intent(v.getContext(), CardInspect.class);
+				
+		      Log.v("JS",urlText);
+		      i.putExtra(STRING_MESSAGE, urlText);
+		      startActivity(i);
+		      
+		    }
+		  };
 	}
 	
 	public static class Card {
 		String mName;
 		int mQuantity;
-//		String mOccupation;
-//		boolean mIsGenderFemale;
-//		int mAge;
-//		Bitmap mImg;
+		String mImagePath;
 		
 		public Card() {}
 		
-		public Card(String name, int quantity) {
+		public Card(String name, int quantity, String imagePath) {
 		mName = name;
 		mQuantity = quantity;
-//		mOccupation = occupation;
-//		mIsGenderFemale = isGenderFemale;
-//		mAge = age;
-//		mImg = img;
+		mImagePath = imagePath;
 		}
 		
 		@Override
