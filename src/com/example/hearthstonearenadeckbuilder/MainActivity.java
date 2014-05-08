@@ -325,15 +325,12 @@ public class MainActivity extends Activity {
 	}
 	
 	public void updateMana(int manaVal) {
-		ProgressBar bar;
 		int count;
 		if(manaVal >= 7) {
-			bar = mProgress[7];
 			manaCounts[7]++;
 			count = manaCounts[7];
 		}
 		else {
-			bar = mProgress[manaVal];
 			manaCounts[manaVal]++;
 			count = manaCounts[manaVal];
 		}
@@ -345,12 +342,6 @@ public class MainActivity extends Activity {
 		Log.v("JS",Integer.toString(highestMana));
 		Log.v("JS",Integer.toString(count));
 		
-//		Float valToSet = (float) ((count/highestMana)*100);
-//		bar.setProgress(valToSet.intValue());
-//		Log.v("JS","SET:");
-//		Log.v("JS",Integer.toString(manaVal));
-//		Log.v("JS","TO:");
-//		Log.v("JS",Float.toString(valToSet));
 		Float valToSet = (float) 0;
 		
 		int equalToHigh = 0;
@@ -359,15 +350,16 @@ public class MainActivity extends Activity {
 				equalToHigh++;
 		}
 		for(int i=0;i<8;i++) {
-			if(manaCounts[i] != highestMana)
-				valToSet = (float) (manaCounts[i]/highestMana)*100;
-			else
-				valToSet = (float) 100/equalToHigh;
+			if(highestMana<=10) {
+				valToSet = (float) (manaCounts[i]) * 10;
+			}
+			else {
+				if(manaCounts[i] != highestMana)
+					valToSet = (float) (manaCounts[i])*(100/highestMana);
+				else
+					valToSet = (float) 100/equalToHigh;
+			}
 			mProgress[i].setProgress(valToSet.intValue());
-			Log.v("JS","SET:");
-			Log.v("JS",Integer.toString(i));
-			Log.v("JS","TO:");
-			Log.v("JS",Float.toString(valToSet));
 		}
 	}
 	
