@@ -27,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.graphics.Typeface;
 
@@ -442,4 +441,5 @@ public class MainActivity extends Activity {
 		URL3 = card3.getString("image_url");
 		new Download3CardsTask().execute(URL1,URL2,URL3);
 	}
+	
 }
