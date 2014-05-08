@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.graphics.Typeface;
@@ -36,7 +37,19 @@ class Download3CardsTask extends AsyncTask<String, Void, Bitmap[]> {
 				MainActivity.loadImageFromNetwork(urls[2])};
 		return cardImages;
 	}
+	protected void onPreExecute() {
+		MainActivity.loadingBox.setVisibility(View.VISIBLE);
+		MainActivity.loadSpin.setVisibility(View.VISIBLE);
+		MainActivity.mImageView1.setVisibility(View.INVISIBLE);
+		MainActivity.mImageView2.setVisibility(View.INVISIBLE);
+		MainActivity.mImageView3.setVisibility(View.INVISIBLE);
+	}
 	protected void onPostExecute(Bitmap[] result) {
+		MainActivity.loadingBox.setVisibility(View.GONE);
+		MainActivity.loadSpin.setVisibility(View.GONE);
+		MainActivity.mImageView1.setVisibility(View.VISIBLE);
+		MainActivity.mImageView2.setVisibility(View.VISIBLE);
+		MainActivity.mImageView3.setVisibility(View.VISIBLE);
 		MainActivity.mImageView1.setImageBitmap(result[0]);
 		MainActivity.mImageView2.setImageBitmap(result[1]);
 		MainActivity.mImageView3.setImageBitmap(result[2]);
@@ -83,6 +96,9 @@ public class MainActivity extends Activity {
 	int[] manaCounts;
 	int highestMana;
 	
+	static RelativeLayout loadingBox;
+	static ProgressBar loadSpin;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -99,12 +115,17 @@ public class MainActivity extends Activity {
 		
 		heroPic = (ImageView) findViewById(R.id.hero_pic);
 		
+		loadingBox = (RelativeLayout) findViewById(R.id.loading_box);
+		loadSpin = (ProgressBar) findViewById(R.id.progress_spin);
+		
 		Intent intent = getIntent();
 		String heroName = intent.getStringExtra(STRING_MESSAGE);
 		int heroNum = intent.getIntExtra(MainActivity.INT_MESSAGE,10);
 		
 		Resources res = getResources();
 		heroUrls = res.getStringArray(R.array.hero_urls);
+		
+		
 		
 		new DownloadHeroTask().execute(heroUrls[heroNum]);
 		
