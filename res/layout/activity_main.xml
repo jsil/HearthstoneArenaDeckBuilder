@@ -281,6 +281,7 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:text="@string/hero_return"
+       android:textColor="#FFFFFFFF"
        android:id="@+id/hero_return_button"
        android:onClick="heroReturnClick"
        android:layout_marginLeft="10dp"
@@ -301,6 +302,7 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:text="@string/view_deck"
+       android:textColor="#FFFFFFFF"
        android:id="@+id/deck_button"
        android:onClick="deckButtonClick"
        android:layout_toRightOf="@id/hero_pic"
@@ -310,7 +312,9 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:id="@+id/deck_count"
+       android:textColor="#FFFFFFFF"
        android:layout_marginBottom="10dp"
+       android:layout_marginLeft="30dp"
        android:layout_below="@id/deck_button"
        android:layout_toRightOf="@id/hero_pic"/>
       

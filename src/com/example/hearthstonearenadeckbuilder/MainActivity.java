@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +22,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -138,6 +143,9 @@ public class MainActivity extends Activity {
 		TextView chooseText = (TextView) findViewById(R.id.choose_a_card);
 	    Typeface face=Typeface.createFromAsset(getAssets(),
 	                                          "fonts/Belwe.ttf");
+	    
+	    heroReturnBtn.getBackground().setColorFilter(0xFF414141, PorterDuff.Mode.MULTIPLY);
+	    deckBtn.getBackground().setColorFilter(0xFF414141, PorterDuff.Mode.MULTIPLY);
 
 	    heroReturnBtn.setTypeface(face);
 	    deckBtn.setTypeface(face);
@@ -399,6 +407,13 @@ public class MainActivity extends Activity {
 	private void loadCards() {
 		Intent i = new Intent(this, Cards.class);
 		
+		try {
+			deckArray = sortJsonArray(deckArray);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		i.putExtra(JSON_MESSAGE, deckArray.toString());
 		startActivity(i);
 	}
@@ -440,6 +455,30 @@ public class MainActivity extends Activity {
 		URL2 = card2.getString("image_url");
 		URL3 = card3.getString("image_url");
 		new Download3CardsTask().execute(URL1,URL2,URL3);
+	}
+	
+	//Sorts JSON array. got basic code from: http://stackoverflow.com/questions/17697568/how-to-sort-jsonarray-in-android
+	public static JSONArray sortJsonArray(JSONArray array) throws JSONException {
+	    List<JSONObject> jsons = new ArrayList<JSONObject>();
+	    for (int i = 0; i < array.length(); i++) {
+	        jsons.add(array.getJSONObject(i));
+	    }
+	    Collections.sort(jsons, new Comparator<JSONObject>() {
+	        @Override
+	        public int compare(JSONObject lhs, JSONObject rhs) {
+	        	String lid = null;
+	        	String rid = null;
+	        	try {
+					lid = Integer.toString(lhs.getInt("mana"));
+					rid = Integer.toString(rhs.getInt("mana"));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	            return lid.compareTo(rid);
+	        }
+	    });
+	    return new JSONArray(jsons);
 	}
 	
 }
