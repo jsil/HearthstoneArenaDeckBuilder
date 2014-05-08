@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.graphics.Typeface;
@@ -78,6 +79,10 @@ public class MainActivity extends Activity {
 	JSONObject card3;
 	TextView cardCounter;
 	
+	ProgressBar[] mProgress;
+	int[] manaCounts;
+	int highestMana;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -130,6 +135,23 @@ public class MainActivity extends Activity {
 	    mana5.setTypeface(face);
 	    mana6.setTypeface(face);
 	    mana7.setTypeface(face);
+	    
+	    mProgress = new ProgressBar[8];
+	    mProgress[0] = (ProgressBar) findViewById(R.id.mana0);
+	    mProgress[1] = (ProgressBar) findViewById(R.id.mana1);
+	    mProgress[2] = (ProgressBar) findViewById(R.id.mana2);
+	    mProgress[3] = (ProgressBar) findViewById(R.id.mana3);
+	    mProgress[4] = (ProgressBar) findViewById(R.id.mana4);
+	    mProgress[5] = (ProgressBar) findViewById(R.id.mana5);
+	    mProgress[6] = (ProgressBar) findViewById(R.id.mana6);
+	    mProgress[7] = (ProgressBar) findViewById(R.id.mana7);
+	    
+	    highestMana = 0;
+	    
+	    manaCounts = new int[8];
+	    for(int i=0;i<manaCounts.length;i++) {
+	    	manaCounts[i] = 0;
+	    }
 		
 		commonArray = new JSONArray();
 		rareArray = new JSONArray();
@@ -146,6 +168,7 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public void onBackPressed() {
+		 moveTaskToBack(true);
 	}
 
 	@Override
@@ -239,6 +262,7 @@ public class MainActivity extends Activity {
 			deckNum++;
 		}
 		if(deckNum<30) {
+			updateMana(card1.getInt("mana"));
 			generateCards();
 			String newText = "" + Integer.toString(deckNum) + "/30";
 			cardCounter.setText(newText);
@@ -262,6 +286,7 @@ public class MainActivity extends Activity {
 			deckNum++;
 		}
 		if(deckNum<30) {
+			updateMana(card2.getInt("mana"));
 			generateCards();
 			String newText = "" + Integer.toString(deckNum) + "/30";
 			cardCounter.setText(newText);
@@ -285,6 +310,7 @@ public class MainActivity extends Activity {
 			deckNum++;
 		}
 		if(deckNum<30) {
+			updateMana(card3.getInt("mana"));
 			generateCards();
 			String newText = "" + Integer.toString(deckNum) + "/30";
 			cardCounter.setText(newText);
@@ -298,6 +324,52 @@ public class MainActivity extends Activity {
 		loadCards();
 	}
 	
+	public void updateMana(int manaVal) {
+		ProgressBar bar;
+		int count;
+		if(manaVal >= 7) {
+			bar = mProgress[7];
+			manaCounts[7]++;
+			count = manaCounts[7];
+		}
+		else {
+			bar = mProgress[manaVal];
+			manaCounts[manaVal]++;
+			count = manaCounts[manaVal];
+		}
+		
+		if(count>highestMana)
+			highestMana = count;
+		
+		Log.v("JS"," ");
+		Log.v("JS",Integer.toString(highestMana));
+		Log.v("JS",Integer.toString(count));
+		
+//		Float valToSet = (float) ((count/highestMana)*100);
+//		bar.setProgress(valToSet.intValue());
+//		Log.v("JS","SET:");
+//		Log.v("JS",Integer.toString(manaVal));
+//		Log.v("JS","TO:");
+//		Log.v("JS",Float.toString(valToSet));
+		Float valToSet = (float) 0;
+		
+		int equalToHigh = 0;
+		for(int i=0;i<8;i++) {
+			if(manaCounts[i] == highestMana)
+				equalToHigh++;
+		}
+		for(int i=0;i<8;i++) {
+			if(manaCounts[i] != highestMana)
+				valToSet = (float) (manaCounts[i]/highestMana)*100;
+			else
+				valToSet = (float) 100/equalToHigh;
+			mProgress[i].setProgress(valToSet.intValue());
+			Log.v("JS","SET:");
+			Log.v("JS",Integer.toString(i));
+			Log.v("JS","TO:");
+			Log.v("JS",Float.toString(valToSet));
+		}
+	}
 	
 	private void loadCards() {
 		Intent i = new Intent(this, Cards.class);
