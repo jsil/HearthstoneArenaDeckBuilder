@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.widget.ImageView;
 
 
@@ -35,7 +34,6 @@ public class CardInspect extends Activity {
 		Intent intent = getIntent();
 		String cardURL = intent.getStringExtra(STRING_MESSAGE);
 		
-		Log.v("JS",cardURL);
 		
 		new DownloadCardTask().execute(cardURL);
 		

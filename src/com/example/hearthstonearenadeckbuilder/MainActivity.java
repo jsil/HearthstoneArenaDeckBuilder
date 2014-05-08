@@ -35,6 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.graphics.Typeface;
 
+//Downloads 3 images and loads them into the 3 card ImageViews
 class Download3CardsTask extends AsyncTask<String, Void, Bitmap[]> {
 	protected Bitmap[] doInBackground(String... urls) {
 		Bitmap[] cardImages = {MainActivity.loadImageFromNetwork(urls[0]),
@@ -43,6 +44,7 @@ class Download3CardsTask extends AsyncTask<String, Void, Bitmap[]> {
 		return cardImages;
 	}
 	protected void onPreExecute() {
+		//Hide images, show spinning progress bar
 		MainActivity.loadingBox.setVisibility(View.VISIBLE);
 		MainActivity.loadSpin.setVisibility(View.VISIBLE);
 		MainActivity.mImageView1.setVisibility(View.INVISIBLE);
@@ -50,6 +52,7 @@ class Download3CardsTask extends AsyncTask<String, Void, Bitmap[]> {
 		MainActivity.mImageView3.setVisibility(View.INVISIBLE);
 	}
 	protected void onPostExecute(Bitmap[] result) {
+		//Hide spinning progress bar, show images
 		MainActivity.loadingBox.setVisibility(View.GONE);
 		MainActivity.loadSpin.setVisibility(View.GONE);
 		MarginLayoutParams params = (MarginLayoutParams) MainActivity.loadSpin.getLayoutParams();
@@ -64,6 +67,7 @@ class Download3CardsTask extends AsyncTask<String, Void, Bitmap[]> {
 	}
 }
 
+//Downloads the Hero image to be displayed at the bottom of the screen
 class DownloadHeroTask extends AsyncTask<String, Void, Bitmap> {
 	protected Bitmap doInBackground(String... urls) {
 		Bitmap heroImage = MainActivity.loadImageFromNetwork(urls[0]);
@@ -75,7 +79,6 @@ class DownloadHeroTask extends AsyncTask<String, Void, Bitmap> {
 }
 
 public class MainActivity extends Activity {
-
 	static final String JSON_MESSAGE = "com.example.hearthstonearenadeckbuilder.JSON";
 	static final String STRING_MESSAGE = "com.example.hearthstonearenadeckbuilder.STRING";
 	static final String INT_MESSAGE = "com.example.hearthstonearenadeckbuilder.INT";
@@ -126,13 +129,13 @@ public class MainActivity extends Activity {
 		loadingBox = (RelativeLayout) findViewById(R.id.loading_box);
 		loadSpin = (ProgressBar) findViewById(R.id.progress_spin);
 		
+		//load data from HeroPick activity
 		Intent intent = getIntent();
 		String heroName = intent.getStringExtra(STRING_MESSAGE);
 		int heroNum = intent.getIntExtra(MainActivity.INT_MESSAGE,10);
 		
 		Resources res = getResources();
 		heroUrls = res.getStringArray(R.array.hero_urls);
-		
 		
 		
 		new DownloadHeroTask().execute(heroUrls[heroNum]);
@@ -196,24 +199,26 @@ public class MainActivity extends Activity {
 		deckArray = new JSONArray();
 		deckNum = 0;
 		
-		Log.v("JS",Integer.toString(heroNum));
-		Log.v("JS",heroName);
 		
 		generatePool(heroName,heroNum);
 	}
 	
+	//Back press on this activity hides the app. Button is used to travel back to hero selection
 	@Override
 	public void onBackPressed() {
 		 moveTaskToBack(true);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
+	//Currently Unused
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.main, menu);
+//		return true;
+//	}
 
+	//Pulls JSON data from .json file included in assets.
+	//Alternate URL: https://raw.githubusercontent.com/pdyck/hearthstone-db/master/cards/all-cards.json
 	public String loadJSONFromAsset() {
         String json = null;
         try {
@@ -230,6 +235,7 @@ public class MainActivity extends Activity {
         return json;
     }
 	
+	//loads a single image from given URL
 	public static Bitmap loadImageFromNetwork (String imgUrl) {
 		Bitmap img = null;
 		URL url;
@@ -246,11 +252,12 @@ public class MainActivity extends Activity {
 		return img;
 	}
 	
-
-	public void onClickBtn(View v) throws JSONException{
-		generateCards();		
-	}
+	//Used for debug purposes only
+//	public void onClickBtn(View v) throws JSONException{
+//		generateCards();		
+//	}
 	
+	//Loads the JSON data into arrays, sorted by card rarity, in preparation for use
 	public void generatePool(String heroName, int heroNum) {
 		try {
 			cardObj = new JSONObject(jsonString);
@@ -283,6 +290,8 @@ public class MainActivity extends Activity {
 		}
 	}
 	
+	//Click listener for left-most card
+	//Loads new cards, unless the deck is full. If deck is full, the list view is opened
 	public void cardLeftClick(View v) throws JSONException {
 		boolean isNew = true;
 		card1.put("quantity",1);
@@ -307,6 +316,8 @@ public class MainActivity extends Activity {
 			loadCards();
 	}
 	
+	//Click listener for center card
+	//Loads new cards, unless the deck is full. If deck is full, the list view is opened
 	public void cardCenterClick(View v) throws JSONException {
 		boolean isNew = true;
 		card2.put("quantity",1);
@@ -331,6 +342,8 @@ public class MainActivity extends Activity {
 			loadCards();
 	}
 	
+	//Click listener for right-most card
+	//Loads new cards, unless the deck is full. If deck is full, the list view is opened
 	public void cardRightClick(View v) throws JSONException {
 		boolean isNew = true;
 		card3.put("quantity",1);
@@ -355,16 +368,18 @@ public class MainActivity extends Activity {
 			loadCards();
 	}
 	
+	//View Deck button opens list view
 	public void deckButtonClick(View v) {
-//		Log.v("JS",deckArray.toString());
 		loadCards();
 	}
 	
+	//Return to the Hero Pick activity for a chance to select another hero or start again.
 	public void heroReturnClick(View v) {
 		Intent i = new Intent(this, HeroPick.class);
 		startActivity(i);
 	}
 	
+	//Once a card is selected, this updates the counters and progress bars for each mana level
 	public void updateMana(int manaVal) {
 		int count;
 		if(manaVal >= 7) {
@@ -379,9 +394,6 @@ public class MainActivity extends Activity {
 		if(count>highestMana)
 			highestMana = count;
 		
-		Log.v("JS"," ");
-		Log.v("JS",Integer.toString(highestMana));
-		Log.v("JS",Integer.toString(count));
 		
 		Float valToSet = (float) 0;
 		
@@ -404,6 +416,7 @@ public class MainActivity extends Activity {
 		}
 	}
 	
+	//Opens the Cards ListView
 	private void loadCards() {
 		Intent i = new Intent(this, Cards.class);
 		
@@ -418,6 +431,7 @@ public class MainActivity extends Activity {
 		startActivity(i);
 	}
 	
+	//Selects a rarity and loads 3 cards from that rarity's JSONArray
 	public void generateCards() throws JSONException {
 		JSONArray valueToDraw;
 		int cardValue = 0 + (int)(Math.random()*100);
@@ -431,7 +445,6 @@ public class MainActivity extends Activity {
 			valueToDraw = commonArray;
 
 		
-		Log.v("JS",Integer.toString(cardValue));
 		
 		int randomCard1 = 0 + (int)(Math.random()*valueToDraw.length()); 
 		int randomCard2 = 0 + (int)(Math.random()*valueToDraw.length());

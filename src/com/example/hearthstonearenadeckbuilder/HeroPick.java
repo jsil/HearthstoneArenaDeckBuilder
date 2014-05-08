@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -97,22 +96,22 @@ public class HeroPick extends Activity {
 		new Download3HeroesTask().execute(heroUrls[num1],heroUrls[num2],heroUrls[num3]);
 	}
 	
-	
+	//Select hero on left-most side
 	public void heroLeftClick(View v) {
-		Log.v("JS","left");
 		goToMain(num1);
 	}
 	
+	//Select hero in center
 	public void heroCenterClick(View v) {
-		Log.v("JS","center");
 		goToMain(num2);
 	}
 	
+	//Select hero on right-most side
 	public void heroRightClick(View v) {
-		Log.v("JS","right");
 		goToMain(num3);
 	}
 	
+	//Opens up the MainActivity (Card Selection Activity)
 	public void goToMain(int heroNum) {
 		Intent i = new Intent(this, MainActivity.class);
 		

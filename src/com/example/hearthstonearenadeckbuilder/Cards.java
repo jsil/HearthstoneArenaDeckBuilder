@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +48,6 @@ public class Cards extends ListActivity {
 		
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
-			Log.v("JS","it broke");
 			e.printStackTrace();
 		}
 		adapter = new CardAdapter(this, cards);
@@ -60,10 +58,9 @@ public class Cards extends ListActivity {
 		private final Context context;
 		public CardAdapter(Context context, Card[] cards) {
 			super(context, R.layout.card,
-					R.id.text, cards);//R.id.label,
+					R.id.text, cards);
 			this.context = context;
 			mCards = cards;
-			Log.v("JS","Cards adapter adapted");
 		}
 		Card[] mCards;
 		
@@ -97,6 +94,7 @@ public class Cards extends ListActivity {
 			return v;
 		}
 		
+		//On click, opens CardInspect activity for full screen view of card
 		View.OnClickListener openCard = new View.OnClickListener() {
 		    public void onClick(View v) {
 		      TextView url = (TextView) v.findViewById(R.id.url);
@@ -104,7 +102,6 @@ public class Cards extends ListActivity {
 		      
 		      Intent i = new Intent(v.getContext(), CardInspect.class);
 				
-		      Log.v("JS",urlText);
 		      i.putExtra(STRING_MESSAGE, urlText);
 		      startActivity(i);
 		      
