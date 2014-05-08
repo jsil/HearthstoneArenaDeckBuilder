@@ -21,6 +21,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,6 +48,9 @@ class Download3CardsTask extends AsyncTask<String, Void, Bitmap[]> {
 	protected void onPostExecute(Bitmap[] result) {
 		MainActivity.loadingBox.setVisibility(View.GONE);
 		MainActivity.loadSpin.setVisibility(View.GONE);
+		MarginLayoutParams params = (MarginLayoutParams) MainActivity.loadSpin.getLayoutParams();
+		params.topMargin = 0;
+		   MainActivity.loadSpin.setLayoutParams(params);
 		MainActivity.mImageView1.setVisibility(View.VISIBLE);
 		MainActivity.mImageView2.setVisibility(View.VISIBLE);
 		MainActivity.mImageView3.setVisibility(View.VISIBLE);
