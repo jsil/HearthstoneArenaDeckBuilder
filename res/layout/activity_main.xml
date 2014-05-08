@@ -71,7 +71,9 @@
           android:layout_height="wrap_content"
           android:layout_below="@id/card_layout"
           android:layout_centerHorizontal="true"
-          android:layout_marginTop="15dp" >
+          android:layout_marginTop="15dp"
+          android:background="@drawable/manaboxstyle"
+          android:padding="10dp" >
 
           
            <TextView

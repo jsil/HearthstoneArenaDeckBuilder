@@ -4,18 +4,20 @@
     <shape>
       <corners android:radius="5dip" />
       <gradient
-        android:angle="270"
-        android:centerColor="#ff5a5d5a"
-        android:centerY="0.5"
-        android:endColor="#ff747674"
-        android:startColor="#ff5a5d5a" />
+        android:startColor="#FF6B2201"
+        android:centerY="0.4"
+        android:endColor="#FF261004" />
     </shape>
   </item>
   <item android:id="@android:id/progress">
-    <clip>
-      <shape>
-        <corners android:radius="5dip" />
-      </shape>
+     <clip>
+        <shape>
+            <corners android:radius="5dip" />
+            <gradient
+                android:startColor="#FFFA5E00"
+                android:centerY="0.4"
+                android:endColor="#FFFBB900" />
+        </shape>
     </clip>
   </item>
 </layer-list>
