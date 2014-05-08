@@ -311,7 +311,7 @@ public class MainActivity extends Activity {
 			}
 		}
 		if(isNew) {
-			deckArray.put(card1);
+			deckArray.put(card2);
 			deckNum++;
 		}
 		if(deckNum<30) {
@@ -335,7 +335,7 @@ public class MainActivity extends Activity {
 			}
 		}
 		if(isNew) {
-			deckArray.put(card1);
+			deckArray.put(card3);
 			deckNum++;
 		}
 		if(deckNum<30) {
@@ -409,9 +409,9 @@ public class MainActivity extends Activity {
 		int cardValue = 0 + (int)(Math.random()*100);
 		if(cardValue <= 1)
 			valueToDraw = legendArray;
-		else if(cardValue > 1 && cardValue <= 4) 
+		else if(cardValue > 1 && cardValue <= 5) 
 			valueToDraw = epicArray;
-		else if(cardValue > 4 && cardValue <= 20)
+		else if(cardValue > 5 && cardValue <= 20)
 			valueToDraw = rareArray;
 		else
 			valueToDraw = commonArray;

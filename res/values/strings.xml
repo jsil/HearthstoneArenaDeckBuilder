@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Hearthstone Arena Deck Builder</string>
+    <string name="app_name">Arena Deck Builder</string>
     <string name="action_settings">Settings</string>
     <string name="choose">Choose a Card</string>
     <string name="hero">Select Hero</string>
